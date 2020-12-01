@@ -1,0 +1,745 @@
+openapi: 3.0.0
+info:
+  title: mosoon
+  version: '1.0'
+servers:
+  - url: 'http://mosoon.linyuanlin.com'
+paths:
+  /member/register:
+    post:
+      summary: register
+      responses:
+        '201':
+          description: Created
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+              examples:
+                example-1:
+                  value:
+                    username: string
+                    real_name: string
+                    gender: 男
+                    cellphone: string
+                    email: string
+                    vip: true
+                    birthday: '2019-08-24'
+                    balance: 0
+                實際例子:
+                  value:
+                    username: JasonChen
+                    real_name: 陳建新
+                    balance: 0
+                    gender: 男
+                    cellphone: '1231231234'
+                    email: qazjason@gmail.com
+                    vip: false
+                    birthday: '2000-11-18'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                example:
+                  value:
+                    message: string
+                實際例子:
+                  value:
+                    message: password unqualified
+        '409':
+          description: Conflict
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                實際例子:
+                  value:
+                    message: user already exists.
+                example:
+                  value:
+                    message: string
+      operationId: post-member-register
+      security: []
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                real_name:
+                  type: string
+                gender:
+                  type: string
+                  enum:
+                    - 男
+                    - 女
+                birthday:
+                  type: string
+                  format: date
+                cellphone:
+                  type: string
+                email:
+                  type: string
+              required:
+                - username
+                - password
+                - real_name
+                - gender
+                - birthday
+                - cellphone
+                - email
+            examples:
+              example:
+                value:
+                  username: string
+                  password: string
+                  real_name: string
+                  gender: 男
+                  birthday: '2019-08-24'
+                  cellphone: string
+                  email: string
+              實際例子:
+                value:
+                  username: JasonChen
+                  real_name: 陳建新
+                  password: qazjason147
+                  gender: 男
+                  cellphone: '1231231234'
+                  email: qazjason@gmail.com
+                  birthday: '2000-11-18'
+      tags:
+        - member
+  /member/login:
+    post:
+      summary: login
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/Member'
+                  token:
+                    type: string
+              examples:
+                實際例子:
+                  value:
+                    user:
+                      username: JasonChen
+                      real_name: 陳建新
+                      balance: 0
+                      gender: 男
+                      cellphone: '1231231234'
+                      email: qazjason@gmail.com
+                      vip: false
+                      birthday: '2000-11-18'
+                    token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1OTc5MDA3MTAsImlhdCI6MTU5NzgxNDMxMCwiZGF0YSI6eyJpZCI6IjVmM2NiNDQ2MzlkYTAxMjNhYjM0MzdiMiIsImFkbWluIjpmYWxzZX19.-Y8gAoTXMtFhsngd-rgEKtZRjVZqqY1Yt_T1fHrIrd0
+                example:
+                  value:
+                    user:
+                      username: string
+                      real_name: string
+                      gender: 男
+                      cellphone: string
+                      email: string
+                      vip: true
+                      birthday: '2019-08-24'
+                      balance: 0
+                    token: string
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                實際例子:
+                  value:
+                    message: Username or password is wrong.
+                example:
+                  value:
+                    message: string
+      operationId: post-member-login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+            examples:
+              example:
+                value:
+                  username: string
+                  password: string
+              實際例子:
+                value:
+                  username: JasonChen
+                  password: qazjason147
+      tags:
+        - member
+  /member/get:
+    get:
+      summary: user_detail
+      tags:
+        - member
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+              examples:
+                example:
+                  value:
+                    username: string
+                    real_name: string
+                    gender: 男
+                    cellphone: string
+                    email: string
+                    vip: true
+                    birthday: '2019-08-24'
+                    balance: 0
+                實際例子:
+                  value:
+                    username: JasonChen
+                    real_name: 陳建新
+                    balance: 0
+                    gender: 男
+                    cellphone: '1231231234'
+                    email: qazjason@gmail.com
+                    vip: false
+                    birthday: '2000-11-18'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                example:
+                  value:
+                    message: string
+                實際例子:
+                  value:
+                    message: The user does not exist
+      operationId: get-member-get
+      security:
+        - JWT token: []
+  /member/all:
+    get:
+      summary: get_all_user
+      tags:
+        - member
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    username:
+                      type: string
+                    real_name:
+                      type: string
+                    balance:
+                      type: integer
+                    vip:
+                      type: boolean
+                    cellphone:
+                      type: string
+                    email:
+                      type: string
+                    birthday:
+                      type: string
+                      format: date
+                    gender:
+                      type: string
+                      enum:
+                        - 男
+                        - 女
+              examples:
+                example:
+                  value:
+                    - id: string
+                      username: string
+                      real_name: string
+                      balance: 0
+                      vip: true
+                      cellphone: string
+                      email: string
+                      birthday: '2019-08-24'
+                      gender: 男
+                實際例子:
+                  value:
+                    - id: 5f365dbed5d8b35072796522
+                      username: '1233'
+                      real_name: '123'
+                      balance: 1000
+                      gender: 男
+                      cellphone: '123'
+                      email: '123'
+                      vip: false
+                      birthday: '2020-08-11'
+                    - id: 5f365fa1d5d8b35072796524
+                      username: sophia123456
+                      real_name: 謝謝謝
+                      balance: 9996000
+                      gender: 女
+                      cellphone: '0900000000'
+                      email: sophia123456@gmail.com
+                      vip: false
+                      birthday: '2020-08-14'
+                    - id: 5f3cb44639da0123ab3437b2
+                      username: JasonChen
+                      real_name: 陳建新
+                      balance: 0
+                      gender: 男
+                      cellphone: '1231231234'
+                      email: qazjason@gmail.com
+                      vip: false
+                      birthday: '2000-11-18'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                example:
+                  value:
+                    message: string
+                實際例子:
+                  value:
+                    message: permission denied
+      operationId: 'get-getAdmin-slug:user_id'
+      security:
+        - JWT token: []
+      description: ''
+    parameters: []
+  '/getAdmin/<slug:user_id>':
+    get:
+      summary: get_user_admin＿only
+      tags:
+        - member
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  real_name:
+                    type: string
+                  id:
+                    type: string
+                  cellphone:
+                    type: string
+                  email:
+                    type: string
+                  birthday:
+                    type: string
+                    format: date
+                  vip:
+                    type: string
+                  gender:
+                    type: string
+                    enum:
+                      - 男
+                      - 女
+                  balance:
+                    type: integer
+              examples:
+                example:
+                  value:
+                    username: string
+                    real_name: string
+                    id: string
+                    cellphone: string
+                    email: string
+                    birthday: '2019-08-24'
+                    vip: string
+                    gender: 男
+                    balance: 0
+                實際例子:
+                  value:
+                    id: 5f365dbed5d8b35072796522
+                    username: '1233'
+                    real_name: '123'
+                    balance: 1000
+                    gender: 男
+                    cellphone: '123'
+                    email: '123'
+                    vip: false
+                    birthday: '2020-08-11'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messsge:
+                    type: string
+              examples:
+                example:
+                  value:
+                    messsge: string
+                實際情況:
+                  value:
+                    messsge: permission denied
+      operationId: 'get-getAdmin-slug:user_id'
+      security:
+        - JWT token: []
+  /member/update:
+    post:
+      summary: update_user
+      tags:
+        - member
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  real_name:
+                    type: string
+                  gender:
+                    type: string
+                    enum:
+                      - 男
+                      - 女
+                  cellphone:
+                    type: string
+                  email:
+                    type: string
+              examples:
+                example:
+                  value:
+                    real_name: string
+                    gender: 男
+                    cellphone: string
+                    email: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                example:
+                  value:
+                    message: Invalid User Data
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                example:
+                  value:
+                    message: string
+                實際情況:
+                  value:
+                    message: '''The user does not exist'''
+      operationId: post-member-update
+      description: ''
+      security:
+        - JWT token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                real_name:
+                  type: string
+                gender:
+                  type: string
+                  enum:
+                    - 男
+                    - 女
+                cellphone:
+                  type: string
+                email:
+                  type: string
+            examples:
+              example:
+                value:
+                  real_name: string
+                  gender: 男
+                  cellphone: string
+                  email: string
+  /member/updateAdmin:
+    post:
+      summary: update_user_admin_only
+      tags:
+        - member
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  username:
+                    type: string
+                  real_name:
+                    type: string
+                  balance:
+                    type: integer
+                  vip:
+                    type: boolean
+                  birthday:
+                    type: string
+                    format: date
+                  email:
+                    type: string
+                  cellphone:
+                    type: string
+                  gender:
+                    type: string
+                    enum:
+                      - 男
+                      - 女
+              examples:
+                example:
+                  value:
+                    id: string
+                    username: string
+                    real_name: string
+                    balance: 0
+                    vip: true
+                    birthday: '2019-08-24'
+                    email: string
+                    cellphone: string
+                    gender: 男
+                實際例子:
+                  value:
+                    id: 5f3d17c0929372f3234be42f
+                    username: Chen
+                    real_name: 陳建新
+                    balance: 1000
+                    gender: 男
+                    cellphone: '1231231234'
+                    email: qazjason@gmail.com
+                    vip: true
+                    birthday: '2020-11-18'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                實際情況2:
+                  value:
+                    message: password unqualified
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                實際情況:
+                  value:
+                    message: Permission denied
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                實際情況:
+                  value:
+                    message: The user does not exist
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                實際情況:
+                  value:
+                    message: The ID exist but the username is wrong
+      operationId: post-member-updateAdmin
+      security:
+        - JWT token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                username:
+                  type: string
+                password:
+                  type: string
+                real_name:
+                  type: string
+                gender:
+                  type: string
+                  enum:
+                    - 男
+                    - 女
+                cellphone:
+                  type: string
+                email:
+                  type: string
+                birthday:
+                  type: string
+                  format: date
+                vip:
+                  type: boolean
+                balance:
+                  type: integer
+            examples:
+              example:
+                value:
+                  id: string
+                  username: string
+                  password: string
+                  real_name: string
+                  gender: 男
+                  cellphone: string
+                  email: string
+                  birthday: '2019-08-24'
+                  vip: true
+                  balance: 0
+              實際例子:
+                value:
+                  id: 5f3d17c0929372f3234be42f
+                  username: Chen
+                  real_name: 陳建新
+                  password: qazjason147
+                  gender: 男
+                  cellphone: '1231231234'
+                  email: qazjason@gmail.com
+                  birthday: '2020-11-18'
+                  vip: true
+                  balance: '1000'
+components:
+  schemas:
+    Member:
+      title: Member
+      type: object
+      description: ''
+      x-examples:
+        example:
+          username: string
+          real_name: string
+          gender: 男
+          cellphone: string
+          email: string
+          vip: true
+          birthday: '2019-08-24'
+          balance: 0
+      properties:
+        username:
+          type: string
+        real_name:
+          type: string
+        gender:
+          type: string
+          enum:
+            - 男
+            - 女
+        cellphone:
+          type: string
+          maxLength: 10
+        email:
+          type: string
+        vip:
+          type: boolean
+        birthday:
+          format: date
+          type: string
+        balance:
+          type: integer
+          default: 0
+      required:
+        - username
+        - real_name
+        - gender
+        - cellphone
+        - email
+        - vip
+        - birthday
+        - balance
+  securitySchemes:
+    JWT token:
+      name: Authorization
+      type: apiKey
+      in: query
+tags:
+  - name: member

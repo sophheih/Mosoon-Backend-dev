@@ -1,0 +1,37 @@
+name: deploy-to-server
+
+on:
+    push:
+        branches: [master]
+
+jobs:
+    build-and-push:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+
+            - name: Setup Django Config
+              run: echo "${{ secrets.CONFIG_FILE }}" >> config.py
+
+            - name: Login into Dockerhub
+              run: echo "${{ secrets.DOCKER_PASS }}" | docker login --username ${{ secrets.DOCKER_USER }} --password-stdin
+
+            - name: Build Docker image
+              run: docker build -t chiefnoob/mosoon:latest .
+
+            - name: Push Docker image
+              run: docker push chiefnoob/mosoon:latest
+
+    deploy-to-server:
+        needs: build-and-push
+        runs-on: ubuntu-latest
+        steps:
+            - name: Install SSH key
+              uses: shimataro/ssh-key-action@v2
+              with:
+                  key: ${{ secrets.SSH_KEY }}
+                  known_hosts: ${{ secrets.KNOWN_HOSTS }}
+
+            - name: Run remote update script
+              run: ssh -o StrictHostKeyChecking=no root@aliyun-hk3.linyuanlin.net "/bin/bash ./update_mosoon.sh"
